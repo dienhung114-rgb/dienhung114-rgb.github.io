@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đêm Trung Thu Phép Thuật - Món Quà Đặc Biệt</title>
+<style>
+    /* ------------------------------ BẦU TRỜI CHUNG ------------------------------ */
+    body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Arial', sans-serif;
+        color: #fff;
+        background: radial-gradient(circle at center, #0b0f19 40%, #000010);
+    }
+
+    /* Sao nhấp nháy */
+    .star {
+        position: absolute;
+        background: #fff;
+        border-radius: 50%;
+        animation: twinkle linear infinite;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        z-index: 5;
+    }
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Sao băng */
+    .shooting-star {
+        position: absolute;
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, white, rgba(255,255,255,0));
+        opacity: 0.8;
+        top: 10%;
+        left: -120px;
+        transform: rotate(30deg);
+        animation: shooting 6s linear infinite;
+        z-index: 5;
+    }
+    @keyframes shooting {
+        0% { left: -120px; top: 10%; opacity: 0; }
+        20% { opacity: 1; }
+        50% { left: 120%; top: 70%; opacity: 1; }
+        100% { opacity: 0; left: 120%; top: 70%; }
+    }
+
+    /* Pháo hoa - Dùng chung */
+    .firework {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: white;
+        animation: explode 1.2s ease-out forwards;
+        z-index: 99;
+    }
+    @keyframes explode {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(1.5) translate(var(--x), var(--y)); opacity: 0; }
+    }
+
+    /* Hiệu ứng khói - Dùng chung */
+    .smoke {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(255,255,255,0));
+        animation: smokeRise 3s ease-out forwards;
+        z-index: 50;
+    }
+    @keyframes smokeRise {
+        0% { opacity: 0.7; transform: translate(-50%, 0) scale(0.5); }
+        100% { opacity: 0; transform: translate(-50%, -200px) scale(1.5); }
+    }
+
+    /* Ánh sáng bùng nổ - Dùng chung */
+    .burst {
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(255,255,200,0.7), rgba(255,255,255,0) 70%);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        animation: burst 1.5s ease-out forwards;
+        z-index: 90;
+    }
+    @keyframes burst {
+        0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+    }
+
+
+    /* ------------------------------ MÀN HÌNH 1: HỘP QUÀ (GIFT BOX SCREEN) ------------------------------ */
+    #gift-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 1s;
+        z-index: 20; 
+    }
+
+    .gift-box {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        background: linear-gradient(145deg, #ff6699, #ff3366);
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 30px 10px rgba(255, 100, 150, 0.4);
+        animation: pulseGift 2s infinite alternate;
+        transform-origin: center bottom;
+        z-index: 10;
+    }
+
+    .gift-box:hover {
+        transform: scale(1.05);
+    }
+
+    .gift-lid {
+        position: absolute;
+        top: -35px;
+        left: 0;
+        width: 100%;
+        height: 45px;
+        background: linear-gradient(145deg, #ff0033, #ff6699);
+        border-radius: 5px;
+        transition: transform 1.2s ease-out;
+        transform-origin: center center;
+        z-index: 15;
+    }
+
+    .ribbon {
+        position: absolute;
+        background: gold;
+        width: 20px;
+        height: 100%;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+
+    .ribbon-horizontal {
+        position: absolute;
+        background: gold;
+        height: 20px;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+
+    .message {
+        color: #fff;
+        margin-bottom: 30px;
+        font-size: 18px;
+        text-align: center;
+        z-index: 20;
+    }
+    
+    .message p {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    @keyframes pulseGift {
+        0% { transform: scale(1); box-shadow: 0 0 20px rgba(255,150,200,0.3); }
+        100% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255,100,200,0.7); }
+    }
+
+    @keyframes flyAway {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        40% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+        100% { transform: translateY(-250px) rotate(360deg); opacity: 0; }
+    }
+
+    /* ------------------------------ MÀN HÌNH 2: ĐÈN LỒNG (LANTERN SCREEN) ------------------------------ */
+    #lantern-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0; /* Bắt đầu ẩn */
+        pointer-events: none; /* Không cho tương tác khi ẩn */
+        transition: opacity 1s;
+        animation: nightSky 20s ease-in-out infinite alternate;
+        background: radial-gradient(circle at center, #0b0f19 40%, #000010); /* Fallback */
+    }
+
+    @keyframes nightSky {
+        0% { background: radial-gradient(circle at 30% 30%, #081326, #000010 80%); }
+        50% { background: radial-gradient(circle at 50% 50%, #101b33, #000010 80%); }
+        100% { background: radial-gradient(circle at 70% 40%, #050b18, #000010 80%); }
+    }
+
+    /* Ánh trăng và vòng sáng xoay quanh */
+    .moon-container {
+        position: absolute;
+        top: 5%;
+        left: 10%;
+        perspective: 1000px;
+        z-index: 10;
+    }
+    .moon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #fff, #ffcc66 60%, #ff9900 100%);
+        box-shadow: 0 0 40px 8px rgba(255, 255, 150, 0.8), 0 0 80px 20px rgba(255, 255, 150, 0.5);
+        animation: pulseMoon 5s infinite alternate;
+        transform: rotateY(20deg) rotateX(10deg);
+    }
+
+    .aura {
+        position: absolute;
+        top: -30px;
+        left: -30px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 200, 0.6);
+        box-shadow: 0 0 20px rgba(255, 255, 150, 0.8);
+        animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseMoon {
+        0% { opacity: 0.8; }
+        100% { opacity: 1; }
+    }
+
+    /* Lồng đèn */
+    .lantern-container {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        cursor: pointer;
+        z-index: 15;
+        animation: sway-fly 20s linear infinite;
+    }
+    .lantern-light {
+        width: 100%;
+        height: 100%;
+        background-color: #ff9900;
+        border: 3px solid #cc0000;
+        border-radius: 50%;
+        position: relative;
+        box-shadow: 0 0 25px 7px rgba(255, 150, 0, 0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        transition: transform 0.3s ease-in-out;
+    }
+    .lantern-container:hover .lantern-light {
+        transform: scale(1.1);
+    }
+    .lantern-icon {
+        font-size: 25px;
+        color: #cc0000;
+    }
+    /* Tăng rộng hộp thông báo để chứa dòng dài tiếng Việt */
+    .hidden-wish {
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 12px;
+        background-color: rgba(0, 0, 0, 0.85);
+        border-radius: 6px;
+        font-size: 13px;
+        width: 220px; /* mở rộng */
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s;
+        z-index: 20;
+        line-height: 1.2;
+    }
+    .show-wish .hidden-wish {
+        opacity: 1;
+    }
+    @keyframes sway-fly {
+        0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.8; }
+        25% { transform: translate3d(150px, -50px, 100px) rotate(5deg); opacity: 1; }
+        50% { transform: translate3d(50px, 100px, -50px) rotate(-5deg); opacity: 0.9; }
+        75% { transform: translate3d(-100px, 50px, 50px) rotate(2deg); opacity: 0.7; }
+        100% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.8; }
+    }
+
+    /* Mẹo nhỏ hiển thị phần hướng dẫn trên cùng màn hình đèn lồng */
+    .lantern-hint {
+        position: absolute;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.6);
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        z-index: 30;
+    }
+</style>
+</head>
+<body>
+
+<div id="gift-screen">
+    <div class="message">
+        <p>🎉 Nhấn vào hộp quà để bắt đầu Đêm Trung Thu 🎉</p>
+    </div>
+    <div class="gift-box" id="giftBox" aria-label="Hộp quà bất ngờ">
+        <div class="gift-lid" id="giftLid"></div>
+        <div class="ribbon"></div>
+        <div class="ribbon-horizontal"></div>
+    </div>
+</div>
+
+<div id="lantern-screen">
+    <div class="moon-container" aria-hidden="true">
+      <div class="aura"></div>
+      <div class="moon"></div>
+    </div>
+
+    <div class="lantern-hint">Nhấn vào mỗi lồng đèn để xem điều bất ngờ ✨</div>
+</div>
+
+<div class="shooting-star" aria-hidden="true"></div>
+
+<audio id="music-main" src="scripts/Thằng Cuội - Tố Hà.mp3" loop></audio>
+
+
+<script>
+    const wishes = [
+     "Chúc em va gia đình sung túc, sum vầy bên nhau! 👨‍👩‍👧‍👦",
+     "Chúc em trung thu an lành, vui vẻ và ấm áp! 💖",
+     "Chúc em mọi điều ước thành hiện thực, Rằm tháng Tám tươi đẹp! ✨",
+     "Chúc em nhận được thật nhiều lộc và niềm vui! 🎁",
+     "Chúc em một mùa trung thu thật ấm áp, ngọt ngào và tràn đầy niềm vui.! 🥳",
+     "Chúc em gia đình bình an, cuộc sống viên mãn! 🏡",
+     "Chúc em luôn xinh tươi và ngập tràn tiếng cười.! 🌟",
+     "Chúc em luôn vô tư và hạnh phúc! 🥳",
+     "Sức khỏe dồi dào, niềm vui tràn ngập! 💪",
+     "Chúc em một mùa trung thu ấm áp và tràn đầy tình yêu thương.! 💘",
+     "Tiền vào như nước, hạnh phúc nhân đôi! 💰",
+     "Thành công, may mắn luôn đồng hành cùng em! 🍀",
+     "Chúc em một mùa trung thu thật ý nghĩa.! 📸",
+     "Tươi trẻ, rạng rỡ như đèn lồng đêm trăng! 😊"
+    ];
+    const icons = ["🏮", "🌕", "🐰", "🐉", "🎉", "🎐", "✨", "🎁", "💖", "😊", "🎂", "🎈"];
+    const body = document.body;
+
+    const giftScreen = document.getElementById('gift-screen');
+    const lanternScreen = document.getElementById('lantern-screen');
+    const giftBox = document.getElementById('giftBox');
+    const giftLid = document.getElementById('giftLid');
+    const musicMain = document.getElementById('music-main'); // Nhạc chính
+
+    // 1. TẠO SAO CHUNG
+    for (let i = 0; i < 100; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.width = s.style.height = `${Math.random() * 3}px`;
+        s.style.top = `${Math.random() * 100}vh`;
+        s.style.left = `${Math.random() * 100}vw`;
+        s.style.animationDuration = `${Math.random() * 3 + 1}s`;
+        body.appendChild(s);
+    }
+
+    function getRandom(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+    // 2. LOGIC MÀN HÌNH HỘP QUÀ
+    giftBox.addEventListener('click', openGiftBox);
+
+    function openGiftBox() {
+        giftBox.removeEventListener('click', openGiftBox); // Ngăn click lần 2
+        
+        // CHẠY NHẠC (Bắt đầu từ đầu và không lặp)
+        musicMain.currentTime = 0; 
+        musicMain.loop = false; 
+        musicMain.play().catch(() => {});
+        
+        giftBox.style.animation = 'none';
+
+        // Nắp hộp bay xoay
+        giftLid.style.animation = 'flyAway 2.5s ease-out forwards';
+
+        // Ánh sáng bùng nổ, Pháo hoa, Khói
+        const burst = document.createElement('div');
+        burst.className = 'burst';
+        burst.style.top = `${window.innerHeight / 2}px`;
+        burst.style.left = `${window.innerWidth / 2}px`;
+        body.appendChild(burst);
+        setTimeout(() => burst.remove(), 1500);
+
+        for (let i = 0; i < 100; i++) {
+            const fw = document.createElement('div');
+            fw.className = 'firework';
+            fw.style.left = '50%';
+            fw.style.top = '50%';
+            fw.style.setProperty('--x', `${(Math.random() - 0.5) * 400}px`);
+            fw.style.setProperty('--y', `${(Math.random() - 0.5) * 400}px`);
+            fw.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            body.appendChild(fw);
+            setTimeout(() => fw.remove(), 1200);
+        }
+
+        for (let i = 0; i < 15; i++) {
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
+            smoke.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+            smoke.style.top = '50%';
+            smoke.style.animationDelay = `${Math.random() * 0.5}s`;
+            body.appendChild(smoke);
+            setTimeout(() => smoke.remove(), 3000);
+        }
+
+        // Chuyển màn hình sau 5 giây
+        setTimeout(showLanternScreen, 5000);
+    }
+
+    // 3. LOGIC CHUYỂN MÀN HÌNH VÀ TẠO ĐÈN LỒNG
+    function showLanternScreen() {
+        giftScreen.style.opacity = '0';
+        giftScreen.style.pointerEvents = 'none';
+
+        lanternScreen.style.opacity = '1';
+        lanternScreen.style.pointerEvents = 'auto';
+
+        // CHẠY NHẠC NỀN CHÍNH (Tiếp tục nhạc và BẬT LẶP)
+        musicMain.loop = true;
+        musicMain.play().catch(() => {});
+
+        // Tạo Đèn lồng trong màn hình chính
+        for (let i = 0; i < 15; i++) {
+            const l = document.createElement('div');
+            l.className = 'lantern-container';
+            l.style.top = `${Math.random() * 80 + 5}vh`;
+            l.style.left = `${Math.random() * 80 + 10}vw`;
+            l.style.animationDelay = `${Math.random() * 15}s`;
+            l.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+            l.innerHTML = `
+                <div class="lantern-light" role="button" aria-label="Lồng đèn, nhấn để xem bất ngờ">
+                  <span class="lantern-icon">${getRandom(icons)}</span>
+                  <div class="hidden-wish">Nhấn vào mỗi lồng đèn là sẽ có điều bất ngờ cho e</div>
+                </div>`;
+            l.addEventListener('click', revealWish);
+            lanternScreen.appendChild(l);
+        }
+    }
+
+    // 4. LOGIC MỞ LỜI CHÚC TỪ ĐÈN LỒNG
+    function revealWish(e) {
+        const l = e.currentTarget;
+        const rect = l.getBoundingClientRect();
+
+        const w = l.querySelector('.hidden-wish');
+        w.textContent = getRandom(wishes);
+        l.classList.add('show-wish');
+        setTimeout(() => l.classList.remove('show-wish'), 4000);
+
+        // Hiệu ứng pháo hoa, khói tại vị trí click
+        const burst = document.createElement('div');
+        burst.className = 'burst';
+        burst.style.left = `${rect.left + rect.width / 2}px`;
+        burst.style.top = `${rect.top + rect.height / 2}px`;
+        body.appendChild(burst);
+        setTimeout(() => burst.remove(), 1000);
+
+        for (let i = 0; i < 40; i++) {
+            const f = document.createElement('div');
+            f.className = 'firework';
+            f.style.left = `${rect.left + rect.width / 2}px`;
+            f.style.top = `${rect.top + rect.height / 2}px`;
+            f.style.setProperty('--x', `${(Math.random() - 0.5) * 200}px`);
+            f.style.setProperty('--y', `${(Math.random() - 0.5) * 200}px`);
+            f.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            body.appendChild(f);
+            setTimeout(() => f.remove(), 1000);
+        }
+
+        for (let i = 0; i < 8; i++) {
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
+            smoke.style.left = `${rect.left + rect.width / 2}px`;
+            smoke.style.top = `${rect.top + rect.height / 2}px`;
+            smoke.style.animationDelay = `${Math.random() * 0.5}s`;
+            body.appendChild(smoke);
+            setTimeout(() => smoke.remove(), 3000);
+        }
+    }
+</script>
+
+</body>
+</html>
